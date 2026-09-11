@@ -59,7 +59,7 @@ test("financing starts with an optional empty entry, four labelled terms and no 
 });
 
 test("empty stock renders an honest message and an accessible recovery action", () => {
-  const html = renderToStaticMarkup(createElement(EmptyState, {
+  const html = renderToStaticMarkup(EmptyState({
     title: "Nenhum veículo encontrado",
     children: "Tente ajustar os filtros.",
     action: createElement("a", { href: "/" }, "Limpar filtros"),
