@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { CatalogFilters } from "../src/components/catalog-filters";
 import { FinancingPanel } from "../src/components/financing-panel";
 import { Gallery } from "../src/components/gallery";
+import { EmptyState } from "../src/components/ui";
 import { parseFilters } from "../src/lib/validation";
 
 test("empty catalogue facets expose no invented brands, models or transmissions", () => {
@@ -55,4 +56,44 @@ test("financing starts with an optional empty entry, four labelled terms and no 
     html,
     /Informe seus dados de financiamento com um vendedor para receber uma simulação personalizada\./,
   );
+});
+
+test("empty stock renders an honest message and an accessible recovery action", () => {
+  const html = renderToStaticMarkup(createElement(EmptyState, {
+    title: "Nenhum veículo encontrado",
+    children: "Tente ajustar os filtros.",
+    action: createElement("a", { href: "/" }, "Limpar filtros"),
+  }));
+  assert.match(html, /<h2>Nenhum veículo encontrado<\/h2>/);
+  assert.match(html, /Tente ajustar os filtros\./);
+  assert.match(html, /<a href="\/">Limpar filtros<\/a>/);
+  assert.match(html, /data-contact-surface="true"/);
+  assert.doesNotMatch(html, /<img|R\$/);
+});
+test("configured financing contact encodes the vehicle and default term without inventing an entry", () => {
+  // Reserved technical phone and component input, never used as business data.
+  const html = renderToStaticMarkup(createElement(FinancingPanel, {
+    vehicle: {
+      id: "unit-input",
+      brand: "A&B",
+      model: "M/1",
+      version: null,
+      year: 2000,
+      price: 100,
+    },
+    whatsappNumber: "+1 (202) 555-0100",
+  }));
+  const href = html.match(/href="(https:\/\/wa\.me\/[^"]+)"/)?.[1];
+  assert.ok(href);
+  const url = new URL(href.replaceAll("&amp;", "&"));
+  assert.equal(url.pathname, "/12025550100");
+  const message = url.searchParams.get("text");
+  assert.ok(message);
+  assert.match(message, /A&B M\/1 2000/);
+  assert.match(message, /R\$\s100,00/);
+  assert.match(message, /Prazo desejado: 48 meses/);
+  assert.doesNotMatch(message, /Entrada pretendida/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /rel="noopener noreferrer"/);
+  assert.doesNotMatch(html, /<button[^>]*disabled/);
 });

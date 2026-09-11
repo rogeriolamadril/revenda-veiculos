@@ -33,3 +33,27 @@ test("valid technical image is re-encoded to WebP without metadata", async () =>
   assert.equal(meta.width, 2);
   assert.equal(meta.exif, undefined);
 });
+
+test("large technical image preserves aspect ratio within the 1920px bound", async () => {
+  // Memory-only decoder input; never a catalogue asset or Storage upload.
+  const bytes = await sharp({
+    create: { width: 2000, height: 1000, channels: 3, background: "#ffffff" },
+  }).png().toBuffer();
+  const normalized = await normalizeImage(
+    new File([new Uint8Array(bytes)], "dimensions.png", { type: "image/png" }),
+  );
+  const meta = await sharp(normalized).metadata();
+  assert.equal(meta.format, "webp");
+  assert.equal(meta.width, 1920);
+  assert.equal(meta.height, 960);
+});
+test("compressed image below the byte limit still rejects more than 20 megapixels", async () => {
+  const bytes = await sharp({
+    create: { width: 5000, height: 4001, channels: 3, background: "#ffffff" },
+  }).png().toBuffer();
+  assert.ok(bytes.length < 5 * 1024 * 1024);
+  const file = new File([new Uint8Array(bytes)], "pixel-limit.png", {
+    type: "image/png",
+  });
+  await assert.rejects(() => normalizeImage(file), /pixel limit/i);
+});

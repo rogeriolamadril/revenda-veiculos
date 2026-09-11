@@ -70,6 +70,8 @@ Verifique `--help` na versão fixada antes de operar. No projeto já provisionad
 
 ## Primeiro administrador real
 
+**Este projeto já tem um administrador real autorizado.** As instruções abaixo servem para instalações novas; não é necessário criar outro usuário nesta revisão.
+
 1. No painel do projeto Supabase, em **Authentication → Users**, adicione a pessoa real responsável pela administração. Ela deve definir uma senha segura; não coloque a senha no repositório ou em mensagens públicas.
 2. Copie o UUID real desse usuário e execute no SQL Editor, como proprietário do banco:
 
@@ -142,7 +144,7 @@ O último comando depende da configuração real e verifica catálogo, filtros, 
 
 O workflow GitHub Actions repete TypeScript, lint, testes e build em PRs. CI não exige secrets do Supabase: a conexão é utilizada em tempo de execução, e a ausência de configuração não quebra a compilação.
 
-O estado mais recente de administrador, Auth, RLS e os limites de aceite estão em `docs/FINAL-REVIEW.md`. Os registros anteriores descrevem o estado histórico, não substituem essa revisão.
+O estado da retomada pelo GitHub, a configuração para futura hospedagem e os limites de aceite estão em [docs/REMOTE-CONTINUITY.md](docs/REMOTE-CONTINUITY.md). `docs/FINAL-REVIEW.md` preserva a revisão anterior; resultados históricos não substituem os checks do commit atual.
 
 Antes de publicar, realize o teste de aceite com o primeiro administrador e um veículo real: login, cadastrar, editar, enviar/remover fotos, reservar/vender, verificar que saiu do catálogo e excluir após confirmação. Nenhum usuário ou veículo fictício deve ser criado para esse teste.
 

@@ -100,3 +100,43 @@ test("WhatsApp is absent without configuration and rejects URL injection", () =>
   assert.equal(parsed.pathname, "/12025550100");
   assert.ok(parsed.searchParams.get("text")?.includes("Olá!"));
 });
+
+test("all three administrative stock statuses remain accepted", () => {
+  for (const status of ["disponivel", "reservado", "vendido"])
+    assert.equal(vehicleSchema.shape.status.parse(status), status);
+});
+test("complete form normalizes values and excludes fields outside the vehicle schema", () => {
+  // Technical form input only: never persisted or sent to Supabase.
+  const parsed = vehicleSchema.parse({
+    brand: " A ",
+    model: " B ",
+    version: "",
+    year: "2000",
+    mileage: "0",
+    color: "",
+    fuel: "",
+    transmission: "",
+    plate_final: "",
+    price: "100.50",
+    description: "",
+    options: " alpha\nalpha\n beta ",
+    status: "reservado",
+    is_admin: true,
+    user_metadata: { role: "admin" },
+  });
+  assert.deepEqual(parsed, {
+    brand: "A",
+    model: "B",
+    version: null,
+    year: 2000,
+    mileage: 0,
+    color: null,
+    fuel: null,
+    transmission: null,
+    plate_final: null,
+    price: 100.5,
+    description: null,
+    options: ["alpha", "beta"],
+    status: "reservado",
+  });
+});
