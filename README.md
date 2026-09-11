@@ -114,6 +114,22 @@ scripts/verify-supabase.mjs     verificação remota somente leitura
 
 ## Validação
 
+A segunda etapa reorganiza a área pública com busca rápida por marca/modelo/preço, filtros avançados por ano/câmbio/quilometragem máxima, fotos maiores e preço destacado. As opções continuam vindo do estoque real. O detalhe apresenta galeria, identificação/preço, especificações, descrição/opcionais e financiamento. `plate_final` permanece no banco e no admin, mas não aparece na interface pública. Os estilos públicos estão isolados em `src/app/public.css`.
+
+### Financiamento e eventos preparados
+
+`FinancingPanel` recebe somente identificação e preço do veículo. A entrada é opcional: vazio significa não informado, e zero significa entrada zero. Aceita centavos com ponto ou vírgula, rejeita negativos e valores acima do preço. Os prazos disponíveis são 24, 36, 48 e 60 meses. Não há taxa configurada, cálculo de parcela, análise de crédito, solicitação de CPF/documentos ou persistência. As preferências vivem apenas no estado do componente e são descartadas ao sair/recarregar.
+
+Com `NEXT_PUBLIC_WHATSAPP_NUMBER` válido, o botão prepara uma mensagem com o veículo, preço, entrada se informada e prazo. O visitante revisa e envia no WhatsApp. Sem telefone válido, o site informa a indisponibilidade e desativa o contato; não improvisa um destinatário. O CTA móvel flutuante fica oculto perto dos filtros, botões dos cards, ações de contato, formulário e rodapé; também fica oculto com menu aberto ou foco no financiamento.
+
+`src/lib/financing.ts` separa validação de preferências e geração da mensagem. Uma futura configuração financeira real deve entrar como dependência explícita, com condições aprovadas e testes próprios; não se deve introduzir uma taxa padrão presumida.
+
+`src/lib/analytics.ts` define `vehicle_view`, `financing_started`, `whatsapp_clicked` e `lead_submitted`. O adaptador padrão não envia, registra, enfileira nem armazena eventos. Os eventos atuais carregam apenas identificador do veículo e origem do contato, nunca entrada, renda, telefone ou documentos. `lead_submitted` está reservado e não é emitido ao abrir WhatsApp. Um futuro adaptador exige decisão explícita sobre finalidade e tratamento dos dados.
+
+Uma futura entidade `financing_requests` poderá relacionar veículo, cliente, contato, preferências e status. Dados como CPF, nascimento e renda só devem ser considerados quando existir necessidade definida, base de tratamento, retenção e controle de acesso. Esta etapa não cria essa tabela. Documentos futuros exigem bucket **privado** e RLS restrita; jamais usar `vehicle-images` para eles.
+
+### Comandos
+
 ```sh
 npm run typecheck
 npm run lint
@@ -122,7 +138,7 @@ npm run build
 node scripts/verify-supabase.mjs
 ```
 
-O último comando depende da configuração real e verifica catálogo, filtros, restrição de leitura administrativa, Storage e opções públicas de Auth, sem criar registros. Os testes unitários usam apenas entradas técnicas isoladas e um buffer de pixels em memória; não alimentam banco ou catálogo.
+O último comando depende da configuração real e verifica catálogo, filtros, restrição de leitura administrativa, Storage e opções públicas de Auth, sem criar registros. Os testes unitários usam apenas entradas técnicas isoladas, renderização de componentes e um buffer de pixels em memória; não alimentam banco ou catálogo. Resultados e limites da segunda etapa estão em `docs/VALIDATION-STAGE2.md`.
 
 O workflow GitHub Actions repete TypeScript, lint, testes e build em PRs. CI não exige secrets do Supabase: a conexão é utilizada em tempo de execução, e a ausência de configuração não quebra a compilação.
 
