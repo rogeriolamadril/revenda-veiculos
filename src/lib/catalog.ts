@@ -34,6 +34,8 @@ export async function getCatalog(filters: Filters) {
     query = query.eq("transmission", filters.transmission);
   if (filters.min !== undefined) query = query.gte("price", filters.min);
   if (filters.max !== undefined) query = query.lte("price", filters.max);
+  if (filters.maxMileage !== undefined)
+    query = query.lte("mileage", filters.maxMileage);
   const [vehicles, facets] = await Promise.all([
     query
       .order("created_at", { ascending: false })

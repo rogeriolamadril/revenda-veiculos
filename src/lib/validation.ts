@@ -80,6 +80,7 @@ export function parseFilters(params: SearchValues) {
   const min = number("min", 9999999999.99);
   const max = number("max", 9999999999.99);
   const year = number("year", new Date().getFullYear() + 2);
+  const mileage = number("maxMileage", 2147483647);
   return {
     brand: first(params.brand).trim().slice(0, 80),
     model: first(params.model).trim().slice(0, 100),
@@ -87,6 +88,8 @@ export function parseFilters(params: SearchValues) {
     year: year && Number.isInteger(year) && year >= 1900 ? year : undefined,
     min,
     max,
+    maxMileage:
+      mileage !== undefined && Number.isInteger(mileage) ? mileage : undefined,
     invalidRange: min !== undefined && max !== undefined && min > max,
     page: Math.max(
       1,

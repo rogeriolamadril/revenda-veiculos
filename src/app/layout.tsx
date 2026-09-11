@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { businessName } from "@/lib/config";
-import { Footer, Header } from "@/components/ui";
+import { Footer } from "@/components/ui";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
+import "./public.css";
 
 export const metadata: Metadata = {
   title: {
@@ -29,7 +31,7 @@ export default function RootLayout({
         <a className="skip-link" href="#conteudo">
           Pular para o conteúdo
         </a>
-        <Header />
+        <SiteHeader />
         <main id="conteudo">{children}</main>
         <Footer />
       </body>
