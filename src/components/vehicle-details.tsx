@@ -8,6 +8,10 @@ import {
   whatsappUrl,
 } from "@/lib/format";
 import { Gallery } from "./gallery";
+import { FinancingPanel } from "./financing-panel";
+import { ContactLink } from "./contact-link";
+import { FloatingContact } from "./floating-contact";
+import { VehicleViewEvent } from "./vehicle-view-event";
 
 export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
   const images = [...vehicle.vehicle_images]
@@ -24,6 +28,7 @@ export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
   ].filter(([, value]) => value !== null);
   return (
     <article className="public-vehicle">
+      <VehicleViewEvent vehicleId={vehicle.id} />
       <div className="public-shell">
         <Link className="public-back" href="/#estoque">
           ← Voltar aos veículos
@@ -40,14 +45,14 @@ export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
             </p>
             <div className="public-primary-actions" data-contact-surface>
               {contact ? (
-                <a
+                <ContactLink
                   className="button button-dark"
                   href={contact}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  source="vehicle_primary"
+                  vehicleId={vehicle.id}
                 >
                   Tenho interesse <span aria-hidden="true">↗</span>
-                </a>
+                </ContactLink>
               ) : (
                 <p className="contact-unavailable">
                   O atendimento por WhatsApp ainda não está disponível.
@@ -89,16 +94,18 @@ export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
               </ul>
             </section>
           )}
-          <section id="financiamento" className="public-finance-intro">
-            <div>
-              <p className="public-kicker">PLANEJE SUA COMPRA</p>
-              <h2>Converse sobre financiamento</h2>
-            </div>
-            <p>
-              Informe seus dados de financiamento com um vendedor para receber
-              uma simulação personalizada.
-            </p>
-          </section>
+          <FinancingPanel
+            key={vehicle.id}
+            vehicle={{
+              id: vehicle.id,
+              brand: vehicle.brand,
+              model: vehicle.model,
+              version: vehicle.version,
+              year: vehicle.year,
+              price: vehicle.price,
+            }}
+            whatsappNumber={process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
+          />
           <section
             id="contato"
             className="public-detail-contact"
@@ -107,14 +114,14 @@ export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
             <h2>Este pode ser o seu próximo carro.</h2>
             <p>Tire suas dúvidas e converse com o vendedor antes de decidir.</p>
             {contact ? (
-              <a
+              <ContactLink
                 className="button button-dark"
                 href={contact}
-                target="_blank"
-                rel="noopener noreferrer"
+                source="vehicle_contact"
+                vehicleId={vehicle.id}
               >
                 Tenho interesse ↗
-              </a>
+              </ContactLink>
             ) : (
               <p className="muted">
                 O atendimento por WhatsApp ainda não está disponível.
@@ -123,6 +130,7 @@ export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
           </section>
         </div>
       </div>
+      <FloatingContact href={contact} vehicleId={vehicle.id} />
     </article>
   );
 }

@@ -44,6 +44,7 @@ export function VehicleCard({ vehicle }: { vehicle: VehicleWithImages }) {
         <p className="public-card-price">{money(vehicle.price)}</p>
         <Link
           className="button public-card-button"
+          data-contact-surface
           href={href}
           aria-label={`Ver veículo: ${vehicleTitle(vehicle)}`}
         >

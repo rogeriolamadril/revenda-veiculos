@@ -27,6 +27,7 @@ export function CatalogFilters({
       className="public-search"
       role="search"
       aria-label="Buscar veículos"
+      data-contact-surface
     >
       <div className="quick-search-fields">
         <label>

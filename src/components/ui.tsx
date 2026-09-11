@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 export function Footer() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" data-contact-surface>
       <span>{businessName}</span>
       <span>Seu próximo caminho começa aqui.</span>
       <Link href="/login">Acesso administrativo</Link>

@@ -6,6 +6,8 @@ import { VehicleCard } from "@/components/vehicle-card";
 import { EmptyState, Notice } from "@/components/ui";
 import { Pagination } from "@/components/pagination";
 import { whatsappUrl } from "@/lib/format";
+import { ContactLink } from "@/components/contact-link";
+import { FloatingContact } from "@/components/floating-contact";
 
 export const dynamic = "force-dynamic";
 export default async function Home({
@@ -173,20 +175,20 @@ export default async function Home({
           <p>Converse sobre os veículos e as possibilidades de compra.</p>
         </div>
         {contact ? (
-          <a
+          <ContactLink
             className="button button-dark"
             href={contact}
-            target="_blank"
-            rel="noopener noreferrer"
+            source="catalog_contact"
           >
             Conversar no WhatsApp ↗
-          </a>
+          </ContactLink>
         ) : (
           <p className="muted text-small">
             O atendimento por WhatsApp ainda não está disponível.
           </p>
         )}
       </section>
+      <FloatingContact href={contact} />
     </div>
   );
 }

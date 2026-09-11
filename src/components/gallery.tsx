@@ -26,8 +26,10 @@ export function Gallery({
       aria-label="Fotos do veículo"
       aria-roledescription="carrossel"
       onKeyDown={(e) => {
-        if (e.key === "ArrowRight") move(1);
-        if (e.key === "ArrowLeft") move(-1);
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          move(e.key === "ArrowRight" ? 1 : -1);
+        }
       }}
     >
       <div className="gallery-main">

@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { businessName } from "@/lib/config";
 import { whatsappUrl } from "@/lib/format";
 import { CarIcon } from "./icons";
+import { ContactLink } from "./contact-link";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -70,14 +71,13 @@ export function SiteHeader() {
         <nav className="public-desktop-nav" aria-label="Navegação principal">
           {links}
           {contact && (
-            <a
+            <ContactLink
               className="header-contact"
               href={contact}
-              target="_blank"
-              rel="noopener noreferrer"
+              source="header"
             >
               WhatsApp ↗
-            </a>
+            </ContactLink>
           )}
         </nav>
         <details
@@ -97,14 +97,9 @@ export function SiteHeader() {
           <nav aria-label="Navegação móvel">
             {links}
             {contact && (
-              <a
-                href={contact}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={close}
-              >
+              <ContactLink href={contact} source="header" onClick={close}>
                 Conversar no WhatsApp ↗
-              </a>
+              </ContactLink>
             )}
           </nav>
         </details>

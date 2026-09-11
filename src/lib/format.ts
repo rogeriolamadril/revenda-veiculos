@@ -11,12 +11,18 @@ export function whatsappUrl(
   number: string | undefined,
   vehicle?: Pick<Vehicle, "brand" | "model" | "version" | "year" | "price">,
 ) {
+  const message = vehicle
+    ? `Olá! Tenho interesse no ${vehicleTitle(vehicle)} ${vehicle.year} anunciado por ${money(vehicle.price)}. Gostaria de mais informações sobre o veículo.`
+    : "Olá! Gostaria de mais informações sobre os veículos disponíveis.";
+  return whatsappMessageUrl(number, message);
+}
+export function whatsappMessageUrl(
+  number: string | undefined,
+  message: string,
+) {
   if (!number || !/^[+\d\s().-]+$/.test(number)) return null;
   const digits = number.replace(/\D/g, "");
   if (!/^[1-9]\d{9,14}$/.test(digits)) return null;
-  const message = vehicle
-    ? `Olá! Tenho interesse no ${vehicleTitle(vehicle)} ${vehicle.year} anunciado por ${money(vehicle.price)}. Gostaria de mais informações e de verificar as opções de financiamento.`
-    : "Olá! Gostaria de mais informações sobre os veículos disponíveis.";
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 export function imageUrl(path: string) {
