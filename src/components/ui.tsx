@@ -22,7 +22,10 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="empty-state glass">
+    <div
+      className="empty-state glass"
+      data-contact-surface={action ? true : undefined}
+    >
       <span className="empty-icon">
         <CarIcon />
       </span>

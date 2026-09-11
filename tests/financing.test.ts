@@ -10,6 +10,7 @@ import {
   type AnalyticsEvent,
 } from "../src/lib/analytics";
 import { parseFilters } from "../src/lib/validation";
+import { whatsappUrl } from "../src/lib/format";
 
 // Technical input for pure unit functions only. Never persisted or used by the application.
 const input: FinancingVehicle = {
@@ -21,6 +22,17 @@ const input: FinancingVehicle = {
   price: 100,
 };
 const phoneInput = "+1 (202) 555-0100";
+
+test("interest CTA preserves vehicle and price without adding financing preferences", () => {
+  const href = whatsappUrl(phoneInput, input);
+  assert.ok(href);
+  const message = new URL(href).searchParams
+    .get("text")!
+    .replaceAll("\u00a0", " ");
+  assert.match(message, /Tenho interesse no A&B M\/1 2000/);
+  assert.match(message, /R\$ 100,00/);
+  assert.doesNotMatch(message, /Entrada pretendida|Prazo desejado/);
+});
 
 test("an omitted down payment remains distinct from an explicit zero", () => {
   assert.deepEqual(

@@ -21,7 +21,7 @@ export function Pagination({
     return `${base}?${query}${base === "/" ? "#estoque" : ""}`;
   };
   return (
-    <nav className="pagination" aria-label="Paginação">
+    <nav className="pagination" aria-label="Paginação" data-contact-surface>
       {page > 1 && (
         <Link className="button button-quiet" href={href(page - 1)}>
           ← Anterior

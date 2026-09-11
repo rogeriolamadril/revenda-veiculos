@@ -142,6 +142,8 @@ O último comando depende da configuração real e verifica catálogo, filtros, 
 
 O workflow GitHub Actions repete TypeScript, lint, testes e build em PRs. CI não exige secrets do Supabase: a conexão é utilizada em tempo de execução, e a ausência de configuração não quebra a compilação.
 
+O estado mais recente de administrador, Auth, RLS e os limites de aceite estão em `docs/FINAL-REVIEW.md`. Os registros anteriores descrevem o estado histórico, não substituem essa revisão.
+
 Antes de publicar, realize o teste de aceite com o primeiro administrador e um veículo real: login, cadastrar, editar, enviar/remover fotos, reservar/vender, verificar que saiu do catálogo e excluir após confirmação. Nenhum usuário ou veículo fictício deve ser criado para esse teste.
 
 ## Build e deploy posterior

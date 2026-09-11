@@ -28,7 +28,7 @@ export function FloatingContact({
       .querySelectorAll("[data-contact-surface]")
       .forEach((element) => observer.observe(element));
     return () => observer.disconnect();
-  }, [href]);
+  }, [href, vehicleId]);
   if (!href || covered) return null;
   return (
     <div className="floating-contact">

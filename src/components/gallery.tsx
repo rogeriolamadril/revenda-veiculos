@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import { galleryIndex, nextGalleryImage } from "@/lib/gallery";
 import { NoPhoto } from "./ui";
 
 export function Gallery({
@@ -10,21 +11,25 @@ export function Gallery({
   images: string[];
   title: string;
 }) {
-  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState<string>();
+  const index = galleryIndex(images, selected);
   const [failed, setFailed] = useState<string[]>([]);
+  const [failedThumbnails, setFailedThumbnails] = useState<string[]>([]);
   if (!images.length)
     return (
       <div className="gallery-main">
         <NoPhoto />
       </div>
     );
-  const move = (delta: number) =>
-    setIndex((i) => (i + delta + images.length) % images.length);
+  const move = (delta: -1 | 1) =>
+    setSelected((current) => nextGalleryImage(images, current, delta));
   return (
     <section
       className="gallery"
       aria-label="Fotos do veículo"
       aria-roledescription="carrossel"
+      tabIndex={images.length > 1 ? 0 : undefined}
+      aria-keyshortcuts={images.length > 1 ? "ArrowLeft ArrowRight" : undefined}
       onKeyDown={(e) => {
         if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
           e.preventDefault();
@@ -77,9 +82,25 @@ export function Gallery({
               type="button"
               aria-label={`Ver foto ${i + 1}`}
               aria-pressed={i === index}
-              onClick={() => setIndex(i)}
+              onClick={() => setSelected(src)}
             >
-              <Image src={src} alt="" width={100} height={72} />
+              {failedThumbnails.includes(src) ? (
+                <span className="gallery-thumbnail-error">
+                  Foto indisponível
+                </span>
+              ) : (
+                <Image
+                  src={src}
+                  alt=""
+                  width={100}
+                  height={72}
+                  onError={() =>
+                    setFailedThumbnails((current) =>
+                      current.includes(src) ? current : [...current, src],
+                    )
+                  }
+                />
+              )}
             </button>
           ))}
         </div>

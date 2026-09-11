@@ -132,7 +132,11 @@ export default async function Home({
             As condições e a disponibilidade de financiamento são confirmadas no
             atendimento.
           </p>
-          <a className="button button-dark" href="#estoque">
+          <a
+            className="button button-dark"
+            href="#estoque"
+            data-contact-surface
+          >
             Escolher um veículo <span aria-hidden="true">↗</span>
           </a>
         </div>

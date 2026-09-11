@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useTransition } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ActionState } from "@/lib/action-state";
 import { Notice } from "./ui";
@@ -18,6 +18,7 @@ export function ConfirmButton({
   redirectTo?: string;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const dialogId = useId();
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<ActionState>({});
   const router = useRouter();
@@ -35,13 +36,14 @@ export function ConfirmButton({
       </button>
       <dialog
         ref={dialog}
-        aria-labelledby={`${label.replace(/\s/g, "")}-title`}
+        aria-labelledby={`${dialogId}-title`}
+        aria-describedby={`${dialogId}-description`}
         onCancel={(event) => {
           if (pending) event.preventDefault();
         }}
       >
-        <h2 id={`${label.replace(/\s/g, "")}-title`}>{title}</h2>
-        <p>{description}</p>
+        <h2 id={`${dialogId}-title`}>{title}</h2>
+        <p id={`${dialogId}-description`}>{description}</p>
         {result.error && <Notice error>{result.error}</Notice>}
         <div className="form-actions">
           <button

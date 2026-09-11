@@ -34,7 +34,11 @@ export function VehicleDetails({ vehicle }: { vehicle: VehicleWithImages }) {
           ← Voltar aos veículos
         </Link>
         <div className="public-detail-top">
-          <Gallery images={images} title={vehicleTitle(vehicle)} />
+          <Gallery
+            key={vehicle.id}
+            images={images}
+            title={vehicleTitle(vehicle)}
+          />
           <header className="public-vehicle-summary">
             <p className="public-kicker">{vehicle.brand}</p>
             <h1>{vehicleTitle(vehicle)}</h1>

@@ -310,6 +310,7 @@
   margin-left: 9px;
 }
 .public-card-price {
+  overflow-wrap: anywhere;
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -437,6 +438,7 @@
   margin-bottom: 23px;
 }
 .public-vehicle-price {
+  overflow-wrap: anywhere;
   font-size: clamp(32px, 3.2vw, 43px);
   line-height: 1.15;
   letter-spacing: -0.05em;
@@ -774,6 +776,7 @@
   color: #4b574d;
 }
 .financing-value strong {
+  overflow-wrap: anywhere;
   font-size: clamp(26px, 3vw, 36px);
   letter-spacing: -1px;
 }
